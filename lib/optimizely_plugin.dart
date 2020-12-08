@@ -12,7 +12,7 @@ class OptimizelyPlugin {
   ) async {
     await _channel.invokeMethod('initOptimizelyManager', <String, dynamic>{
       'sdk_key': sdkKey,
-      'data_file': dataFile,
+      'datafile': dataFile,
     });
   }
 
