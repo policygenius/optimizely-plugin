@@ -6,9 +6,13 @@ class OptimizelyPlugin {
   static const MethodChannel _channel =
       const MethodChannel('optimizely_plugin');
 
-  static Future<void> initOptimizelyManager(String sdkKey) async {
+  static Future<void> initOptimizelyManager(
+    String sdkKey,
+    String dataFile,
+  ) async {
     await _channel.invokeMethod('initOptimizelyManager', <String, dynamic>{
       'sdk_key': sdkKey,
+      'data_file': dataFile,
     });
   }
 

@@ -6,7 +6,13 @@ import 'package:optimizely_plugin/optimizely_plugin.dart';
 
 Future<void> main() async {
   runApp(MyApp());
-  await OptimizelyPlugin.initOptimizelyManager('your_optimizely_sdk_key');
+  // Uses the Optimizely example:
+  // https://docs.developers.optimizely.com/full-stack/docs/example-datafile
+  final dataFile = await rootBundle.loadString('assets/datafile.json');
+  await OptimizelyPlugin.initOptimizelyManager(
+    'your_optimizely_sdk_key',
+    dataFile,
+  );
 }
 
 class MyApp extends StatefulWidget {

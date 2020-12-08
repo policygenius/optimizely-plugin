@@ -46,7 +46,10 @@ void main() {
 
   test('initOptimizelyManager', () async {
     try {
-      OptimizelyPlugin.initOptimizelyManager('sdkKey');
+      OptimizelyPlugin.initOptimizelyManager(
+        'sdkKey',
+        'dataFile',
+      );
     } on PlatformException catch (error) {
       throw error;
     }
