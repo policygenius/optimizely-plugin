@@ -3,6 +3,7 @@ package com.policygenius.optimizely_plugin
 import android.app.Activity
 import androidx.annotation.NonNull
 import com.noveogroup.android.log.Log
+import com.optimizely.ab.android.sdk.OptimizelyClient
 import com.optimizely.ab.android.sdk.OptimizelyManager
 import com.optimizely.ab.optimizelyjson.OptimizelyJSON
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -23,7 +24,8 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
   private lateinit var activity: Activity
-  private lateinit var optimizelyManager: OptimizelyManager
+  //private lateinit var optimizelyManager: OptimizelyManager
+  private lateinit var optimizelyClient: OptimizelyClient
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "optimizely_plugin")
@@ -48,23 +50,27 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "isFeatureEnabled") {
-      val featureKey = call.argument<String>("feature_key")
-      val userId = call.argument<String>("user_id")
-      val flag = isFeatureEnabled(featureKey!!, userId!!)
-      result.success(flag)
-    } else if (call.method == "initOptimizelyManager") {
-      val sdkKey = call.argument<String>("sdk_key")
-      initOptimizelyManager(sdkKey!!)
-      result.success("")
-    } else if (call.method == "getAllFeatureVariables") {
-      val featureKey = call.argument<String>("feature_key")
-      val userId = call.argument<String>("user_id")
-      val attributes = call.argument<MutableMap<String,Any>>("attributes")
-      val variables = getAllFeatureVariables(featureKey!!,userId!!,attributes!!)
-      result.success(variables)
-    } else {
-      result.notImplemented()
+    when (call.method) {
+      "initOptimizelyManager" -> {
+        val sdkKey = call.argument<String>("sdk_key")
+        val dataFile = call.argument<String>("datafile")
+        initOptimizelyManager(sdkKey!!, dataFile!!)
+        result.success("")
+      }
+      "isFeatureEnabled" -> {
+        val featureKey = call.argument<String>("feature_key")
+        val userId = call.argument<String>("user_id")
+        val flag = isFeatureEnabled(featureKey!!, userId!!)
+        result.success(flag)
+      }
+      "getAllFeatureVariables" -> {
+        val featureKey = call.argument<String>("feature_key")
+        val userId = call.argument<String>("user_id")
+        val attributes = call.argument<MutableMap<String,Any>>("attributes")
+        val variables = getAllFeatureVariables(featureKey!!,userId!!,attributes!!)
+        result.success(variables)
+      }
+      else -> result.notImplemented()
     }
   }
 
@@ -88,34 +94,27 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     TODO("Not yet implemented")
   }
 
-  private fun initOptimizelyManager(sdkKey: String) {
+  private fun initOptimizelyManager(sdkKey: String, dataFile: String) {
     val builder = OptimizelyManager.builder()
     // In Android, the minimum polling interval is 60 seconds. In iOS, the minimum polling
     // interval is 2 minutes while the app is open. If you specify shorter polling intervals
     // than these minimums, the SDK will automatically reset the intervals to 60 seconds (Android)
     // or 2 minutes (iOS).
-    optimizelyManager = builder.withDatafileDownloadInterval(60)
+    val optimizelyManager = builder.withDatafileDownloadInterval(60)
             .withSDKKey(sdkKey)
             .build(activity.applicationContext)
+
+    optimizelyClient = optimizelyManager.initialize(activity.applicationContext, dataFile, true, true)
   }
 
   private fun isFeatureEnabled(featureKey: String, userId: String): Boolean{
-    // Updated datafiles do not take effect until your app is restarted or when you re-initialize
-    // the Optimizely manager. This implementation strategy allows the data to change while the
-    // app is running without causing nondeterministic behavior.
-    val client = optimizelyManager.initialize(activity.applicationContext, R.raw.datafile)
-    val flag = client.isFeatureEnabled(featureKey, userId)
+    val flag = optimizelyClient.isFeatureEnabled(featureKey, userId)
 
     return flag
   }
 
   private fun getAllFeatureVariables(featureKey: String, userId: String, attributes: MutableMap<String, Any>): Map<String, Any>? {
-    // Updated datafiles do not take effect until your app is restarted or when you re-initialize
-    // the Optimizely manager. This implementation strategy allows the data to change while the
-    // app is running without causing nondeterministic behavior.
-    val client = optimizelyManager.initialize(activity.applicationContext, R.raw.datafile)
-
-    val json = client.getAllFeatureVariables(featureKey, userId, attributes)
+    val json = optimizelyClient.getAllFeatureVariables(featureKey, userId, attributes)
     return json?.toMap()
   }
 }
