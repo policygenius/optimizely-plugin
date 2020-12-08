@@ -6,7 +6,13 @@ import 'package:optimizely_plugin/optimizely_plugin.dart';
 
 Future<void> main() async {
   runApp(MyApp());
-  await OptimizelyPlugin.initOptimizelyManager('your_optimizely_sdk_key');
+  // Uses the Optimizely example:
+  // https://docs.developers.optimizely.com/full-stack/docs/example-datafile
+  final dataFile = await rootBundle.loadString('assets/datafile.json');
+  await OptimizelyPlugin.initOptimizelyManager(
+    'your_optimizely_sdk_key',
+    dataFile,
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -15,8 +21,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _flutterFlag = 'unknown';
-  String _calculator = 'unknown';
+  String _priceFilterFlag = 'unknown';
+  String _minPriceVariable = 'unknown';
 
   @override
   void initState() {
@@ -24,20 +30,20 @@ class _MyAppState extends State<MyApp> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> getFlutterFlag() async {
-    String flutterFlag;
+  Future<void> getPriceFilterFlag() async {
+    String priceFilterFlag;
     // Platform messages may fail, so we use a try/catch PlatformException.
     var platform =
         Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
       bool featureEnabled = await OptimizelyPlugin.isFeatureEnabled(
-        'flutter',
-        'user@pg.com',
+        'price_filter',
+        'user@example.org',
         {'platform': platform},
       );
-      flutterFlag = 'flutter feature is $featureEnabled.';
+      priceFilterFlag = 'price_filter feature is $featureEnabled.';
     } on PlatformException catch (e) {
-      flutterFlag = "Failed to get feature: '${e.message}'.";
+      priceFilterFlag = "Failed to get feature: '${e.message}'.";
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -46,30 +52,31 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _flutterFlag = flutterFlag;
+      _priceFilterFlag = priceFilterFlag;
     });
   }
 
-  Future<void> getCalculatorType() async {
-    String calculator;
+  Future<void> getPriceFilterMinPrice() async {
+    String minPriceVariable;
     Map<String, dynamic> variables;
     var platform =
         Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
       variables = await OptimizelyPlugin.getAllFeatureVariables(
-        'merlin_operations_calculator',
-        'user@pg.com',
+        'price_filter',
+        'user@example.org',
         {'platform': platform},
       );
-      calculator = variables['calc_type'];
+      int minPrice = variables['min_price'];
+      minPriceVariable = "min_price variable is: ${minPrice.toString()}.";
     } catch (e) {
-      calculator = "Failed to get calculator type: '$e'.";
+      minPriceVariable = "Failed to get min_price variable from feature: '$e'.";
     }
 
     if (!mounted) return;
 
     setState(() {
-      _calculator = calculator;
+      _minPriceVariable = minPriceVariable;
     });
   }
 
@@ -78,29 +85,33 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Optimizely example app'),
+          title: const Text('Optimizely Example App'),
         ),
-        body: Column(
-          children: [
-            Center(
-              child: Text(_flutterFlag),
-            ),
-            RaisedButton(
-              child: Text('Get Flutter Flag'),
-              onPressed: () {
-                getFlutterFlag();
-              },
-            ),
-            Center(
-              child: Text(_calculator),
-            ),
-            RaisedButton(
-              child: Text('Get Calculator Type'),
-              onPressed: () {
-                getCalculatorType();
-              },
-            )
-          ],
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 32),
+              Center(
+                child: Text(_priceFilterFlag),
+              ),
+              RaisedButton(
+                child: Text('Get Price Filter Flag'),
+                onPressed: () {
+                  getPriceFilterFlag();
+                },
+              ),
+              SizedBox(height: 16),
+              Center(
+                child: Text(_minPriceVariable),
+              ),
+              RaisedButton(
+                child: Text('Get Price Filter Min Price'),
+                onPressed: () {
+                  getPriceFilterMinPrice();
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

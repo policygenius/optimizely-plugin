@@ -29,7 +29,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
         case "initOptimizelyManager":
             do {
                 let sdkKey: String = try arguments.argument(for: "sdk_key")
-                let dataFile: String? = try arguments.optionalArgument(for: "dataFile")
+                let dataFile: String? = try arguments.optionalArgument(for: "datafile")
                 let client = OptimizelyClient(
                     sdkKey: sdkKey,
                     periodicDownloadInterval: 60
