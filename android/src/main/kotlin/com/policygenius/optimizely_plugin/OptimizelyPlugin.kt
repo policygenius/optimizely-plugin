@@ -67,7 +67,7 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         val featureKey = call.argument<String>("feature_key")
         val userId = call.argument<String>("user_id")
         val attributes = call.argument<MutableMap<String,Any>>("attributes")
-        val variables = getAllFeatureVariables(featureKey!!,userId!!,attributes!!)
+        val variables = getAllFeatureVariables(featureKey!!, userId!!, attributes!!)
         result.success(variables)
       }
       else -> result.notImplemented()
