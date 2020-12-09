@@ -1,6 +1,6 @@
 # optimizely_plugin
 
-[![pub package](https://img.shields.io/pub/v/optimizely_plugin.svg)](https://pub.dev/packages/optimizely_plugin) [![pub points](https://badges.bar/optimizely_plugin/pub%20points)](https://pub.dev/packages/optimizely_plugin/score) [![likes](https://badges.bar/optimizely_plugin/likes)](https://pub.dev/packages/optimizely_plugin/score) [![popularity](https://badges.bar/optimizely_plugin/popularity)]
+[![pub package](https://img.shields.io/pub/v/optimizely_plugin.svg)](https://pub.dev/packages/optimizely_plugin) [![pub points](https://badges.bar/optimizely_plugin/pub%20points)](https://pub.dev/packages/optimizely_plugin/score) [![likes](https://badges.bar/optimizely_plugin/likes)](https://pub.dev/packages/optimizely_plugin/score) [![popularity](https://badges.bar/optimizely_plugin/popularity)](https://pub.dev/packages/optimizely_plugin/score)
 
 Flutter plugin for Optimizely native SDKs
 
