@@ -30,3 +30,13 @@ The example application shows how to use these functions in more details.  Befor
  - create a [flag with variables](https://docs.developers.optimizely.com/full-stack/docs/create-feature-variables)
    ![Flag With Variables](https://user-images.githubusercontent.com/46966906/101215717-4e0fba00-364c-11eb-8e49-cd43e03a60fb.png)
 
+## Installation
+
+Add `optimizely_plugin` as a dependency in your project's `pubspec.yaml`
+
+```
+dependencies:
+  optimizely_plugin: ^0.1.0
+```
+
+Then run `flutter pub get` in your project directory
