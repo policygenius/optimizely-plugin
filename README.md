@@ -1,5 +1,7 @@
 # optimizely_plugin
 
+[![pub package](https://img.shields.io/pub/v/optimizely_plugin.svg)](https://pub.dev/packages/optimizely_plugin) [![pub points](https://badges.bar/optimizely_plugin/pub%20points)](https://pub.dev/packages/optimizely_plugin/score) [![likes](https://badges.bar/optimizely_plugin/likes)](https://pub.dev/packages/optimizely_plugin/score) [![popularity](https://badges.bar/optimizely_plugin/popularity)]
+
 Flutter plugin for Optimizely native SDKs
 
 ## Getting Started
