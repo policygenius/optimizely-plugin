@@ -1,7 +1,6 @@
 name: optimizely_plugin
 description: Flutter plugin for Optimizely SDK
 version: 0.1.0
-author: Policygenius Engineering
 homepage: https://www.policygenius.com/
 repository: https://github.com/policygenius/optimizely-plugin
 
