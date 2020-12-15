@@ -46,7 +46,8 @@ void main() {
 
   test('initOptimizelyManager', () async {
     try {
-      OptimizelyPlugin.initOptimizelyManager(
+      final optimizelyPlugin = OptimizelyPlugin();
+      optimizelyPlugin.initOptimizelyManager(
         'sdkKey',
         'dataFile',
       );
@@ -56,7 +57,8 @@ void main() {
   });
 
   test('isFeatureEnabled', () async {
-    final enabled = await OptimizelyPlugin.isFeatureEnabled(
+    final optimizelyPlugin = OptimizelyPlugin();
+    final enabled = await optimizelyPlugin.isFeatureEnabled(
       'flutter',
       'user@pg.com',
       {'platform': 'android'},
@@ -65,7 +67,8 @@ void main() {
   });
 
   test('getAllFeatureVariablesAndroid', () async {
-    var features = await OptimizelyPlugin.getAllFeatureVariables(
+    final optimizelyPlugin = OptimizelyPlugin();
+    var features = await optimizelyPlugin.getAllFeatureVariables(
       'calculator',
       'user@pg.com',
       {'platform': 'android'},
@@ -74,7 +77,8 @@ void main() {
   });
 
   test('getAllFeatureVariablesApple', () async {
-    var features = await OptimizelyPlugin.getAllFeatureVariables(
+    final optimizelyPlugin = OptimizelyPlugin();
+    var features = await optimizelyPlugin.getAllFeatureVariables(
       'calculator',
       'user@pg.com',
       {'platform': 'ios'},

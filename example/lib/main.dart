@@ -6,13 +6,6 @@ import 'package:optimizely_plugin/optimizely_plugin.dart';
 
 Future<void> main() async {
   runApp(MyApp());
-  // Uses the Optimizely example:
-  // https://docs.developers.optimizely.com/full-stack/docs/example-datafile
-  final dataFile = await rootBundle.loadString('assets/datafile.json');
-  await OptimizelyPlugin.initOptimizelyManager(
-    'your_optimizely_sdk_key',
-    dataFile,
-  );
 }
 
 class MyApp extends StatefulWidget {
@@ -23,10 +16,23 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _priceFilterFlag = 'unknown';
   String _minPriceVariable = 'unknown';
+  final OptimizelyPlugin optimizelyPlugin = OptimizelyPlugin();
 
   @override
   void initState() {
     super.initState();
+    setupOptimizely();
+  }
+
+  void setupOptimizely() async {
+    // Uses the Optimizely example:
+    // https://docs.developers.optimizely.com/full-stack/docs/example-datafile
+    final dataFile =
+        await DefaultAssetBundle.of(context).loadString('assets/datafile.json');
+    await optimizelyPlugin.initOptimizelyManager(
+      'your_optimizely_sdk_key',
+      dataFile,
+    );
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -36,7 +42,7 @@ class _MyAppState extends State<MyApp> {
     var platform =
         Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
-      bool featureEnabled = await OptimizelyPlugin.isFeatureEnabled(
+      bool featureEnabled = await optimizelyPlugin.isFeatureEnabled(
         'price_filter',
         'user@example.org',
         {'platform': platform},
@@ -62,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     var platform =
         Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
-      variables = await OptimizelyPlugin.getAllFeatureVariables(
+      variables = await optimizelyPlugin.getAllFeatureVariables(
         'price_filter',
         'user@example.org',
         {'platform': platform},

@@ -1,12 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 
 class OptimizelyPlugin {
+  const OptimizelyPlugin();
+
   static const MethodChannel _channel =
       const MethodChannel('optimizely_plugin');
 
-  static Future<void> initOptimizelyManager(
+  Future<void> initOptimizelyManager(
     String sdkKey,
     String dataFile,
   ) async {
@@ -16,10 +17,10 @@ class OptimizelyPlugin {
     });
   }
 
-  static Future<bool> isFeatureEnabled(
+  Future<bool> isFeatureEnabled(
     String featureKey,
     userID,
-    Map<String, String> attributes,
+    Map<String, dynamic> attributes,
   ) async {
     return await _channel.invokeMethod('isFeatureEnabled', <String, dynamic>{
       'feature_key': featureKey,
@@ -28,10 +29,10 @@ class OptimizelyPlugin {
     });
   }
 
-  static Future<Map<String, dynamic>> getAllFeatureVariables(
+  Future<Map<String, dynamic>> getAllFeatureVariables(
     String featureKey,
     userID,
-    Map<String, String> attributes,
+    Map<String, dynamic> attributes,
   ) async {
     final featureVariables =
         await _channel.invokeMethod('getAllFeatureVariables', <String, dynamic>{
