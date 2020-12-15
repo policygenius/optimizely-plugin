@@ -20,7 +20,7 @@ class OptimizelyPlugin {
   Future<bool> isFeatureEnabled(
     String featureKey,
     userID,
-    Map<String, String> attributes,
+    Map<String, dynamic> attributes,
   ) async {
     return await _channel.invokeMethod('isFeatureEnabled', <String, dynamic>{
       'feature_key': featureKey,
@@ -32,7 +32,7 @@ class OptimizelyPlugin {
   Future<Map<String, dynamic>> getAllFeatureVariables(
     String featureKey,
     userID,
-    Map<String, String> attributes,
+    Map<String, dynamic> attributes,
   ) async {
     final featureVariables =
         await _channel.invokeMethod('getAllFeatureVariables', <String, dynamic>{
