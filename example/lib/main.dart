@@ -5,17 +5,22 @@ import 'package:flutter/services.dart';
 import 'package:optimizely_plugin/optimizely_plugin.dart';
 
 Future<void> main() async {
-  runApp(MyApp());
   // Uses the Optimizely example:
   // https://docs.developers.optimizely.com/full-stack/docs/example-datafile
   final dataFile = await rootBundle.loadString('assets/datafile.json');
-  await OptimizelyPlugin.initOptimizelyManager(
+  var optimizelyPlugin = OptimizelyPlugin();
+  await optimizelyPlugin.initOptimizelyManager(
     'your_optimizely_sdk_key',
     dataFile,
   );
+  runApp(MyApp(optimizelyPlugin: optimizelyPlugin));
 }
 
 class MyApp extends StatefulWidget {
+  MyApp({@required this.optimizelyPlugin});
+
+  final OptimizelyPlugin optimizelyPlugin;
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -36,7 +41,7 @@ class _MyAppState extends State<MyApp> {
     var platform =
         Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
-      bool featureEnabled = await OptimizelyPlugin.isFeatureEnabled(
+      bool featureEnabled = await widget.optimizelyPlugin.isFeatureEnabled(
         'price_filter',
         'user@example.org',
         {'platform': platform},
@@ -62,7 +67,7 @@ class _MyAppState extends State<MyApp> {
     var platform =
         Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
-      variables = await OptimizelyPlugin.getAllFeatureVariables(
+      variables = await widget.optimizelyPlugin.getAllFeatureVariables(
         'price_filter',
         'user@example.org',
         {'platform': platform},

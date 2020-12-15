@@ -6,7 +6,7 @@ class OptimizelyPlugin {
   static const MethodChannel _channel =
       const MethodChannel('optimizely_plugin');
 
-  static Future<void> initOptimizelyManager(
+  Future<void> initOptimizelyManager(
     String sdkKey,
     String dataFile,
   ) async {
@@ -16,7 +16,7 @@ class OptimizelyPlugin {
     });
   }
 
-  static Future<bool> isFeatureEnabled(
+  Future<bool> isFeatureEnabled(
     String featureKey,
     userID,
     Map<String, String> attributes,
@@ -28,7 +28,7 @@ class OptimizelyPlugin {
     });
   }
 
-  static Future<Map<String, dynamic>> getAllFeatureVariables(
+  Future<Map<String, dynamic>> getAllFeatureVariables(
     String featureKey,
     userID,
     Map<String, String> attributes,
