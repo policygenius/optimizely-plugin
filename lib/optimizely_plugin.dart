@@ -1,8 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 
 class OptimizelyPlugin {
+  const OptimizelyPlugin();
+
   static const MethodChannel _channel =
       const MethodChannel('optimizely_plugin');
 
