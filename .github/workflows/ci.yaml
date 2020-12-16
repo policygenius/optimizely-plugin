@@ -2,11 +2,6 @@ name: ci
 
 on:
   pull_request:
-    paths:
-      - "pubspec.yaml"
-      - "lib/**"
-      - "test/**"
-      - ".github/workflows/**"
     branches:
       - main
 
