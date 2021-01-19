@@ -21,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    setupOptimizely();
+    setupOptimizelyAsync();
   }
 
   void setupOptimizely() async {
@@ -32,6 +32,12 @@ class _MyAppState extends State<MyApp> {
     await optimizelyPlugin.initOptimizelyManager(
       'your_optimizely_sdk_key',
       dataFile,
+    );
+  }
+
+  void setupOptimizelyAsync() async {
+    await optimizelyPlugin.initOptimizelyManagerAsync(
+      'your_optimizely_sdk_key',
     );
   }
 

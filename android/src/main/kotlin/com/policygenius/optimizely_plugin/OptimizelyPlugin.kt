@@ -2,10 +2,8 @@ package com.policygenius.optimizely_plugin
 
 import android.app.Activity
 import androidx.annotation.NonNull
-import com.noveogroup.android.log.Log
 import com.optimizely.ab.android.sdk.OptimizelyClient
 import com.optimizely.ab.android.sdk.OptimizelyManager
-import com.optimizely.ab.optimizelyjson.OptimizelyJSON
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -14,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import java.io.Console
+
 
 /** OptimizelyPlugin */
 class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -57,6 +55,12 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         initOptimizelyManager(sdkKey!!, dataFile!!)
         result.success("")
       }
+      "initOptimizelyManagerAsync" -> {
+        val sdkKey = call.argument<String>("sdk_key")
+        //val dataFile = call.argument<String>("datafile")
+        initOptimizelyManagerAsync(sdkKey!!)
+        result.success("")
+      }
       "isFeatureEnabled" -> {
         val featureKey = call.argument<String>("feature_key")
         val userId = call.argument<String>("user_id")
@@ -66,7 +70,7 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "getAllFeatureVariables" -> {
         val featureKey = call.argument<String>("feature_key")
         val userId = call.argument<String>("user_id")
-        val attributes = call.argument<MutableMap<String,Any>>("attributes")
+        val attributes = call.argument<MutableMap<String, Any>>("attributes")
         val variables = getAllFeatureVariables(featureKey!!, userId!!, attributes!!)
         result.success(variables)
       }
@@ -105,6 +109,21 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
             .build(activity.applicationContext)
 
     optimizelyClient = optimizelyManager.initialize(activity.applicationContext, dataFile, true, true)
+  }
+
+  private fun initOptimizelyManagerAsync(sdkKey: String) {
+    val builder = OptimizelyManager.builder()
+    // In Android, the minimum polling interval is 60 seconds. In iOS, the minimum polling
+    // interval is 2 minutes while the app is open. If you specify shorter polling intervals
+    // than these minimums, the SDK will automatically reset the intervals to 60 seconds (Android)
+    // or 2 minutes (iOS).
+    val optimizelyManager = builder.withDatafileDownloadInterval(60)
+            .withSDKKey("sdkKey")
+            .build(activity.applicationContext)
+
+    optimizelyManager.initialize(activity.applicationContext, null) {
+      client -> optimizelyClient = client
+    }
   }
 
   private fun isFeatureEnabled(featureKey: String, userId: String): Boolean{
