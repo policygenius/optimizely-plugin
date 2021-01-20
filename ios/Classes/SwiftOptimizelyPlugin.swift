@@ -1,6 +1,11 @@
 import Flutter
 import Optimizely
 
+enum InitResult {
+  case success
+  case failure(Error)
+}
+
 public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
     
     typealias GetFeatureItems = (featureKey: String, userId: String, attributes: OptimizelyAttributes?)
@@ -34,8 +39,10 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
                     sdkKey: sdkKey,
                     periodicDownloadInterval: 60
                 )
+              
                 try startClient(client, dataFile: dataFile)
                 self.client = client
+              
                 result(nil)
             } catch {
                 result(error)
@@ -47,9 +54,17 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
               sdkKey: sdkKey,
               periodicDownloadInterval: 60
             )
-            try startClient(client, dataFile: dataFile)
+            
+            try startClient(client) { initResult in
+              switch initResult {
+                case .failure(let error):
+                  result(error)
+                case .success:
+                  result(nil)
+              }
+            }
+            
             self.client = client
-            result(nil)
           } catch {
             result(error)
           }
@@ -102,7 +117,18 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
             client.start()
         }
     }
-    
+  
+  func startClient(_ client: OptimizelyClient, completion: @escaping (InitResult) -> Void) throws {
+      client.start { clientResult in
+        switch clientResult {
+          case .failure(let error):
+            completion(.failure(error))
+          case .success(_):
+            completion(.success)
+          }
+      }
+    }
+      
     func getFeatureItems(from arguments: [String: Any]) throws -> GetFeatureItems {
         let featureKey: String = try arguments.argument(for: "feature_key")
         let userId: String = try arguments.argument(for: "user_id")
