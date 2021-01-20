@@ -45,7 +45,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
               
                 result(nil)
             } catch {
-                result(error)
+              result(error.localizedDescription)
             }
         case "initOptimizelyManagerAsync":
           do {
@@ -58,7 +58,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
             try startClient(client) { initResult in
               switch initResult {
                 case .failure(let error):
-                  result(error)
+                  result(error.localizedDescription)
                 case .success:
                   result(nil)
               }
@@ -66,7 +66,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
             
             self.client = client
           } catch {
-            result(error)
+            result(error.localizedDescription)
           }
         case "isFeatureEnabled":
             do {
@@ -79,7 +79,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
                 )
                 result(enabled)
             } catch {
-                result(error)
+              result(error.localizedDescription)
             }
         case "getAllFeatureVariables":
             do {
@@ -92,7 +92,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
                 )
                 result(json.toMap())
             } catch {
-                result(error)
+              result(error.localizedDescription)
             }
         default:
             result(FlutterMethodNotImplemented)
