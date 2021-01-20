@@ -26,7 +26,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
         }
         
         switch call.method {
-        case "initOptimizelyManager":
+        case "initOptimizelyManagerSync":
             do {
                 let sdkKey: String = try arguments.argument(for: "sdk_key")
                 let dataFile: String? = try arguments.optionalArgument(for: "datafile")
@@ -40,6 +40,19 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
             } catch {
                 result(error)
             }
+        case "initOptimizelyManagerAsync":
+          do {
+            let sdkKey: String = try arguments.argument(for: "sdk_key")
+            let client = OptimizelyClient(
+              sdkKey: sdkKey,
+              periodicDownloadInterval: 60
+            )
+            try startClient(client, dataFile: dataFile)
+            self.client = client
+            result(nil)
+          } catch {
+            result(error)
+          }
         case "isFeatureEnabled":
             do {
                 let client = try ensureClient()
