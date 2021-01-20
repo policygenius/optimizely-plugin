@@ -57,7 +57,6 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       }
       "initOptimizelyManagerAsync" -> {
         val sdkKey = call.argument<String>("sdk_key")
-        //val dataFile = call.argument<String>("datafile")
         initOptimizelyManagerAsync(sdkKey!!)
         result.success("")
       }
@@ -118,7 +117,7 @@ class OptimizelyPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     // than these minimums, the SDK will automatically reset the intervals to 60 seconds (Android)
     // or 2 minutes (iOS).
     val optimizelyManager = builder.withDatafileDownloadInterval(60)
-            .withSDKKey("sdkKey")
+            .withSDKKey(sdkKey)
             .build(activity.applicationContext)
 
     optimizelyManager.initialize(activity.applicationContext, null) {
