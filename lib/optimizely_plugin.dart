@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 class OptimizelyPlugin {
@@ -14,6 +15,14 @@ class OptimizelyPlugin {
     await _channel.invokeMethod('initOptimizelyManager', <String, dynamic>{
       'sdk_key': sdkKey,
       'datafile': dataFile,
+    });
+  }
+
+  Future<void> initOptimizelyManagerAsync(
+    String sdkKey,
+  ) async {
+    await _channel.invokeMethod('initOptimizelyManagerAsync', <String, dynamic>{
+      'sdk_key': sdkKey,
     });
   }
 

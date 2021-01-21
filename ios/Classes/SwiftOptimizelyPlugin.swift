@@ -1,6 +1,11 @@
 import Flutter
 import Optimizely
 
+enum InitResult {
+  case success
+  case failure(Error)
+}
+
 public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
     
     typealias GetFeatureItems = (featureKey: String, userId: String, attributes: OptimizelyAttributes?)
@@ -34,12 +39,35 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
                     sdkKey: sdkKey,
                     periodicDownloadInterval: 60
                 )
+              
                 try startClient(client, dataFile: dataFile)
                 self.client = client
+              
                 result(nil)
             } catch {
-                result(error)
+              result(error.localizedDescription)
             }
+        case "initOptimizelyManagerAsync":
+          do {
+            let sdkKey: String = try arguments.argument(for: "sdk_key")
+            let client = OptimizelyClient(
+              sdkKey: sdkKey,
+              periodicDownloadInterval: 60
+            )
+            
+            try startClient(client) { initResult in
+              switch initResult {
+                case .failure(let error):
+                  result(error.localizedDescription)
+                case .success:
+                  result(nil)
+              }
+            }
+            
+            self.client = client
+          } catch {
+            result(error.localizedDescription)
+          }
         case "isFeatureEnabled":
             do {
                 let client = try ensureClient()
@@ -51,7 +79,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
                 )
                 result(enabled)
             } catch {
-                result(error)
+              result(error.localizedDescription)
             }
         case "getAllFeatureVariables":
             do {
@@ -64,7 +92,7 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
                 )
                 result(json.toMap())
             } catch {
-                result(error)
+              result(error.localizedDescription)
             }
         default:
             result(FlutterMethodNotImplemented)
@@ -89,7 +117,18 @@ public class SwiftOptimizelyPlugin: NSObject, FlutterPlugin {
             client.start()
         }
     }
-    
+  
+  func startClient(_ client: OptimizelyClient, completion: @escaping (InitResult) -> Void) throws {
+      client.start { clientResult in
+        switch clientResult {
+          case .failure(let error):
+            completion(.failure(error))
+          case .success(_):
+            completion(.success)
+          }
+      }
+    }
+      
     func getFeatureItems(from arguments: [String: Any]) throws -> GetFeatureItems {
         let featureKey: String = try arguments.argument(for: "feature_key")
         let userId: String = try arguments.argument(for: "user_id")
