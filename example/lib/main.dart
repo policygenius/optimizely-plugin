@@ -21,17 +21,23 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    setupOptimizely();
+    setupOptimizelyAsync();
   }
 
   void setupOptimizely() async {
     // Uses the Optimizely example:
     // https://docs.developers.optimizely.com/full-stack/docs/example-datafile
     final dataFile =
-        await DefaultAssetBundle.of(context).loadString('assets/datafile.json');
+    await DefaultAssetBundle.of(context).loadString('assets/datafile.json');
     await optimizelyPlugin.initOptimizelyManager(
       'your_optimizely_sdk_key',
       dataFile,
+    );
+  }
+
+  void setupOptimizelyAsync() async {
+    await optimizelyPlugin.initOptimizelyManagerAsync(
+      'your_optimizely_sdk_key',
     );
   }
 
@@ -40,9 +46,9 @@ class _MyAppState extends State<MyApp> {
     String priceFilterFlag;
     // Platform messages may fail, so we use a try/catch PlatformException.
     var platform =
-        Theme.of(context).platform.toString().split('.')[1].toLowerCase();
+    Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
-      bool featureEnabled = await optimizelyPlugin.isFeatureEnabled(
+      bool? featureEnabled = await optimizelyPlugin.isFeatureEnabled(
         'price_filter',
         'user@example.org',
         {'platform': platform},
@@ -66,14 +72,14 @@ class _MyAppState extends State<MyApp> {
     String minPriceVariable;
     Map<String, dynamic> variables;
     var platform =
-        Theme.of(context).platform.toString().split('.')[1].toLowerCase();
+    Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
       variables = await optimizelyPlugin.getAllFeatureVariables(
         'price_filter',
         'user@example.org',
         {'platform': platform},
       );
-      int minPrice = variables['min_price'];
+      int? minPrice = variables['min_price'];
       minPriceVariable = "min_price variable is: ${minPrice.toString()}.";
     } catch (e) {
       minPriceVariable = "Failed to get min_price variable from feature: '$e'.";
@@ -100,7 +106,7 @@ class _MyAppState extends State<MyApp> {
               Center(
                 child: Text(_priceFilterFlag),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Get Price Filter Flag'),
                 onPressed: () {
                   getPriceFilterFlag();
@@ -110,7 +116,7 @@ class _MyAppState extends State<MyApp> {
               Center(
                 child: Text(_minPriceVariable),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Get Price Filter Min Price'),
                 onPressed: () {
                   getPriceFilterMinPrice();

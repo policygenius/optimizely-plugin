@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 class OptimizelyPlugin {
@@ -17,7 +18,15 @@ class OptimizelyPlugin {
     });
   }
 
-  Future<bool> isFeatureEnabled(
+  Future<void> initOptimizelyManagerAsync(
+    String sdkKey,
+  ) async {
+    await _channel.invokeMethod('initOptimizelyManagerAsync', <String, dynamic>{
+      'sdk_key': sdkKey,
+    });
+  }
+
+  Future<bool?> isFeatureEnabled(
     String featureKey,
     userID,
     Map<String, dynamic> attributes,
