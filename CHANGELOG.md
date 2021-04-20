@@ -1,3 +1,9 @@
+# 0.1.3
+
+Tests running and passing on latest Dart release 2.0.5
+Migration to null safety as detailed here: https://dart.dev/null-safety/migration-guide#step2-migrate
+Ty to @afermin for the update with PR #11 🙏
+
 # 0.1.2
 
 Added asynchronous initialization as described here: https://docs.developers.optimizely.com/full-stack/docs/initialize-sdk-android#section-asynchronous-initialization
