@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
     var platform =
         Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
-      bool featureEnabled = await optimizelyPlugin.isFeatureEnabled(
+      bool? featureEnabled = await optimizelyPlugin.isFeatureEnabled(
         'price_filter',
         'user@example.org',
         {'platform': platform},
@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
         'user@example.org',
         {'platform': platform},
       );
-      int minPrice = variables['min_price'];
+      int? minPrice = variables['min_price'];
       minPriceVariable = "min_price variable is: ${minPrice.toString()}.";
     } catch (e) {
       minPriceVariable = "Failed to get min_price variable from feature: '$e'.";
@@ -106,7 +106,7 @@ class _MyAppState extends State<MyApp> {
               Center(
                 child: Text(_priceFilterFlag),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Get Price Filter Flag'),
                 onPressed: () {
                   getPriceFilterFlag();
@@ -116,7 +116,7 @@ class _MyAppState extends State<MyApp> {
               Center(
                 child: Text(_minPriceVariable),
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Get Price Filter Min Price'),
                 onPressed: () {
                   getPriceFilterMinPrice();

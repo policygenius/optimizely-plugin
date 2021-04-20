@@ -26,7 +26,7 @@ class OptimizelyPlugin {
     });
   }
 
-  Future<bool> isFeatureEnabled(
+  Future<bool?> isFeatureEnabled(
     String featureKey,
     userID,
     Map<String, dynamic> attributes,
