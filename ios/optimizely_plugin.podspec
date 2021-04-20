@@ -15,7 +15,7 @@ Flutter plugin for optimizely SDK
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'OptimizelySwiftSDK'
+  s.dependency 'OptimizelySwiftSDK', '~> 3.6.1'
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
