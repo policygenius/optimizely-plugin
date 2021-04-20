@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     // Uses the Optimizely example:
     // https://docs.developers.optimizely.com/full-stack/docs/example-datafile
     final dataFile =
-    await DefaultAssetBundle.of(context).loadString('assets/datafile.json');
+        await DefaultAssetBundle.of(context).loadString('assets/datafile.json');
     await optimizelyPlugin.initOptimizelyManager(
       'your_optimizely_sdk_key',
       dataFile,
@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
     String priceFilterFlag;
     // Platform messages may fail, so we use a try/catch PlatformException.
     var platform =
-    Theme.of(context).platform.toString().split('.')[1].toLowerCase();
+        Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
       bool? featureEnabled = await optimizelyPlugin.isFeatureEnabled(
         'price_filter',
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
     String minPriceVariable;
     Map<String, dynamic> variables;
     var platform =
-    Theme.of(context).platform.toString().split('.')[1].toLowerCase();
+        Theme.of(context).platform.toString().split('.')[1].toLowerCase();
     try {
       variables = await optimizelyPlugin.getAllFeatureVariables(
         'price_filter',
