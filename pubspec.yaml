@@ -1,5 +1,5 @@
 name: optimizely_plugin
-description: Flutter plugin for Optimizely SDK
+description: Flutter plugin for Optimizely native SDKs. Check feature flags and get feature variables from your Optimizely project.
 version: 0.1.3
 homepage: https://www.policygenius.com/
 repository: https://github.com/policygenius/optimizely-plugin
