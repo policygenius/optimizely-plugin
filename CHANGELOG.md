@@ -2,7 +2,7 @@
 
 Tests running and passing on latest Dart release 2.0.5
 Migration to null safety as detailed here: https://dart.dev/null-safety/migration-guide#step2-migrate
-Ty to @afermin for the update with PR #11 🙏
+Thanks to @afermin for the update with PR #11 🙏
 
 # 0.1.2
 
