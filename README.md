@@ -40,7 +40,7 @@ Add `optimizely_plugin` as a dependency in your project's `pubspec.yaml`
 
 ```
 dependencies:
-  optimizely_plugin: ^0.1.0
+  optimizely_plugin: ^0.1.3
 ```
 
 Then run `flutter pub get` in your project directory
